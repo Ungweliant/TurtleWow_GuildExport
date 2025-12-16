@@ -1,16 +1,37 @@
-SLASH_GUILDEXPORT1="/gexport"
-SlashCmdList.GUILDEXPORT=function()
-  GuildExportDB={}
-  local lines = {}
-  lines[#lines+1] = "Name,Rank,Level,Class,Note,OfficerNote"
-  
-  for i=1,GetNumGuildMembers() do
-    local n,r,x,l,c,y,nt,ont=GetGuildRosterInfo(i)
-    GuildExportDB[i]={name=n,rank=r,level=l,class=c,note=nt,officernote=ont}
-    lines[#lines+1] = string.format("%s,%s,%d,%s,%s", n, r, l, c, nt, ont and "TRUE" or "FALSE")
+print("GuildExport loaded")
+
+SLASH_GUILDEXPORT1 = "/gexport"
+
+SlashCmdList.GUILDEXPORT = function()
+  GuildExportDB = {}
+  GuildExportCSV = nil
+
+  local lines
+  lines = {}
+
+  lines[0] = "Name,Rank,Level,Class,Note,OfficerNote"
+
+  for i = 1, GetNumGuildMembers() do
+    local n,r,_,l,c,_,nt,ont = GetGuildRosterInfo(i)
+
+    n   = n or ""
+    r   = r or ""
+    l   = l or 0
+    c   = c or ""
+    nt  = nt or ""
+    ont = ont or ""
+
+    GuildExportDB[i] = {
+      name = n,
+      rank = r,
+      level = l,
+      class = c,
+      note = nt,
+      officernote = ont
+    }
+    lines[i] =  n .. "," .. r .. "," .. l .. "," .. c .. "," .. nt .. "," .. ont .. "\n"
   end
-  GuildExportCSV = table.concat(lines, "\n")
-  print("Guild roster saved. Reload or logout to write file.")
+
+  GuildExportCSV = table.concat(lines, ";")
+  print("Guild roster exported to CSV. Reload or logout to write file.")
 end
-
-
