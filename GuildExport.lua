@@ -9,7 +9,7 @@ SlashCmdList.GUILDEXPORT = function()
   local lines
   lines = {}
 
-  lines[0] = "Name,Rank,Level,Class,Note,OfficerNote"
+  lines[1] = "Name,Rank,Level,Class,Note,OfficerNote"
 
   for i = 1, GetNumGuildMembers() do
     local n,r,_,l,c,_,nt,ont = GetGuildRosterInfo(i)
@@ -29,7 +29,7 @@ SlashCmdList.GUILDEXPORT = function()
       note = nt,
       officernote = ont
     }
-    lines[i] =  n .. "," .. r .. "," .. l .. "," .. c .. "," .. nt .. "," .. ont .. "\n"
+    lines[i+1] =  n .. "," .. r .. "," .. l .. "," .. c .. "," .. nt .. "," .. ont
   end
 
   GuildExportCSV = table.concat(lines, ";")
