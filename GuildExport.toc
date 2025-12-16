@@ -1,0 +1,5 @@
+## Interface: 11403
+## Title: GuildExport
+## SavedVariables: GuildExportDB
+
+GuildExport.lua
