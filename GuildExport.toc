@@ -1,5 +1,7 @@
 ## Interface: 11200
 ## Title: GuildExport
+## Notes: Export the guildRoster via /gexport
+## Version: 0.1
 
 
 GuildExport.lua
