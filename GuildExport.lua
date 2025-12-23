@@ -1,8 +1,6 @@
 print("GuildExport loaded")
 
 
-
-
 -- Create the custom frame for the popup
 local function CreateExportPopup()
 
@@ -52,11 +50,23 @@ SlashCmdList.GUILDEXPORT = function()
     local guildName = GetGuildInfo("player")  -- Gets the guild name of the player
 
     local members = {}
+	
+	local Time = time()--GetServerTime()
+	local formattedTime = Time --date("%Y-%m-%d %H:%M:%S", serverTime)
+	table.insert(members, {T = formattedTime})
 
     -- Loop through the guild members and get their info (e.g., name, rank, level)
     for i = 1, GetNumGuildMembers() do
         local name, rank, _, level, class, _, note, officerNote = GetGuildRosterInfo(i)
-        table.insert(members, { name = name, rank = rank, level = level, class = class, note = note, officerNote = officerNote})
+		local years, months, days, hours = GetGuildRosterLastOnline(i)
+		years, months, days, hours = years and years or 0, months and months or 0, days and days or 0, hours and hours or 0;
+		
+		local offline = ((years*12)+months)*30+days
+		
+		--local lastonline = date("%Y-%m-%d %H:%M:%S", Time - secondsoffline)
+		if (level>=60) then
+			table.insert(members, { n = name, r = rank, l = level, c = class, nt = note, ont = officerNote, o = offline})
+		end
     end
 
     -- Store the roster data in GuildExportDB
@@ -64,13 +74,17 @@ SlashCmdList.GUILDEXPORT = function()
 
     -- Print or log the JSON string if needed
     print("Guild data exported: ")
+	
 
+	
+	
     -- Convert the GuildExportDB to JSON format
     local jsonString = json.encode(GuildExportDB)
 
+
     -- Create the popup frame and text box (if not already created)
     local popupFrame, textBox = CreateExportPopup()
-
+	
     -- Set the text in the text box to the exported JSON data
     textBox:SetText(jsonString)
 	textBox:HighlightText()  -- Select all text
